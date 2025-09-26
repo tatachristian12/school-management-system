@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Create account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+<div class="container">
+  <br>
+  <h1 class="text-center">Welcome to SMS</h1>
+  
+<h2>Create student Account</h2>
+<br>
+<form method="POST" action="/create-student-account-auth" autocomplete="off">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">First Name</label>
+    <input type="text" name="fname" placeholder="Enter first name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Last Name</label>
+    <input type="text" name="lname" placeholder="Enter last name" class="form-control" required>
+  </div>
+ 
+  <div class="mb-3">
+    <label class="form-label">Email address</label>
+    <input type="email" name="email" placeholder="Enter last name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Username</label>
+    <input type="text" name="username" placeholder="Enter username" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">password</label>
+    <input type="password" name="password" placeholder="Enter password" class="form-control" required>
+  </div>
+  <div>
+    <p>Already have an account? <a href="/">login</a></p>
+  </div>
+  {% if messages %}
+  <div class="alert alert-primary" role="alert">
+  {% for eachMessage in messages %}
+    {{eachMessage}}
+  {% endfor %}
+</div>
+  {% else %}
+
+  {% endif%}
+  <button type="submit" class="btn btn-primary">Create student account </button>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>

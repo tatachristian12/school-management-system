@@ -1,0 +1,27 @@
+from django.db import models
+from smsAuth.models import *
+
+# Create your models here.
+class Student(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_student")
+    address = models.CharField(max_length=100,null=False,blank=True)
+    student_number = models.CharField(max_length=100,null=False,blank=True)
+    DOB = models.CharField(max_length=30,null=False,blank=True)
+    status = models.CharField(max_length=30,null=False,blank=True,default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Department(models.Model):
+    name = models.CharField(max_length=100,null=False,blank=True)
+
+class Courses(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,related_name="course_department")
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="course_student")
+    name = models.CharField(max_length=100,null=False,blank=True)
+    course_value = models.CharField(max_length=100,null=False,blank=True)
+    course_code = models.CharField(max_length=100,null=False,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
