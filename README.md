@@ -1,2 +1,2 @@
 # school-management-system
-DJANGO-FRAMEWORK
+USING DJANGO-FRAMEWORK
