@@ -25,6 +25,7 @@ from smsAuth import urls
 
 
 urlpatterns = [
+               
     path('', include('student.urls')),
     path('', include('schoolManagement.urls')),
     path('', include('parent.urls')),

@@ -5,4 +5,27 @@
 
 {% block content %}
 
-{% endblock %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-3">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Teacher Profile</h2>
+            <h5 class="mb-3">Personal Info</h5>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">{{ request.user.username | upper }}</li>
+                <li class="list-group-item "><strong>Email : </strong> {{ request.user.email }}</li>
+                <li class="list-group-item "><strong>First Name : </strong> {{ request.user.first_name}}</li>
+                <li class="list-group-item "><strong>Last Name : </strong> {{ request.user.last_name }}</li>
+            </ul>
+            <h5 class="mb-3">Teacher Details</h5>
+            <ul class="list-group mb-4">
+                <li class="list-group-item"><strong>Employee No:</strong> {{ teacher_instance.employee_number }}</li>
+                <li class="list-group-item"><strong>Address:</strong> {{ teacher_instance.address }}</li>
+                <li class="list-group-item"><strong>Marital Status:</strong> {{ teacher_instance.marital_status }}</li>
+                <li class="list-group-item"><strong>Date of Birth:</strong> {{ teacher_instance.DOB }}</li>
+            </ul>
+            <div class="text-center">
+                <a href="edit-teacher-profile/{{teacher_instance.id}}" class="btn btn-warning">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
