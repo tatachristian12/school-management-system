@@ -1,7 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+
+
+
 
 # Create your views here.
 def teacherProfile(request):
+
+
+
+
+
+
+
     return render(request, 'teacher/profile.html')
 
 def teacherCourse(request):
@@ -14,10 +25,40 @@ def teacherAnnouncement(request):
     return render(request, 'teacher/announcement.html')
 
 def teacherEditProfile(request):
+
+
+
+
+
+
+
     return render(request, 'teacher/editProfile.html')
 
 def teacherUpdateProfile(request):
-    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return redirect()
 
 def teacherAddCourse(request):
     pass
