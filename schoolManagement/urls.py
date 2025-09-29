@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin-manage-student-account', views.adminManageStudentAccount),
     # path('admin-manage-student-account', views.adminManageStudentAccount),
     path('admin-staff-accounts', views.adminStaffAccounts),
-
+    path('edit-admin-profile/<int:admin_id>', views.adminEditProfile),
+    path('update-admin-profile/<int:admin_id>', views.adminUpdateProfile),
 
 ]

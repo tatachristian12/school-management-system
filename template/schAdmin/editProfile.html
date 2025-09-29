@@ -1,0 +1,66 @@
+{% extends "schAdmin/base.html" %}
+{% load static %}
+
+{% block title %} Edit profile {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-3">
+        <div class="card-body">
+            <form method="POST" action="/update-admin-profile/{{admin_id}}" autocomplete="off">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" value="{{request.user.first_name}}"
+                        placeholder="Enter first name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" value="{{request.user.last_name}}" placeholder="Enter last name"
+                        class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" name="email" value="{{request.user.email}}" placeholder="Enter last name"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" value="{{request.user.username}}" placeholder="Enter username"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" value="{{admin_instance.address}}" placeholder="Enter Address"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Marital Status</label>
+                    <input type="text" name="marital_status" value="{{admin_instance.marital_status}}"
+                        placeholder="Enter Marital status" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="text" name="DOB" value="{{admin_instance.DOB}}" placeholder="Enter DOB"
+                        class="form-control" required>
+                </div>
+
+                {% if messages %}
+                <div class="alert alert-primary" role="alert">
+                    {% for eachMessage in messages %}
+                    {{eachMessage}}
+                    {% endfor %}
+                </div>
+                {% else %}
+
+                {% endif %}
+                <div class="d-flex justify-content-between">
+                <a href="/admin-profile" class="btn btn-secondary">Back</a>
+                <button type="submit" class="btn btn-primary">Update Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
