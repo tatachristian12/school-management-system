@@ -11,19 +11,16 @@ class Student(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class Department(models.Model):
+class SchoolDepartment(models.Model):
     name = models.CharField(max_length=100,null=False,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
 class Courses(models.Model):
-    department = models.ForeignKey(Department, on_delete=models.CASCADE,related_name="course_department")
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="course_student")
+    department = models.ForeignKey(SchoolDepartment, on_delete=models.CASCADE,related_name="course_department")
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name="course_management")
     name = models.CharField(max_length=100,null=False,blank=True)
     course_value = models.CharField(max_length=100,null=False,blank=True)
     course_code = models.CharField(max_length=100,null=False,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-

@@ -4,9 +4,11 @@
 {% block title %} Edit profile {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-lg p-4 rounded-3">
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<div class="container mt-1">
+    <div class="card shadow-lg  rounded-3">
         <div class="card-body">
+            <h2 class="card-title text-center mb-4">Edit Profile</h2>
             <form method="POST" action="/update-teacher-profile/{{teacher_id}}" autocomplete="off">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -63,4 +65,5 @@
         </div>
     </div>
 </div>
+</main>
 {% endblock %}

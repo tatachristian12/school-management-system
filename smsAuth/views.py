@@ -35,15 +35,15 @@ def createManagementAccountAuth(request):
             newManagementInstance = Management(user = newUserInstance)
             newManagementInstance.save()
             messages.success(request, "Account created successfully")
-            return redirect('/create-account')
+            return redirect('/create-management-account')
         
         else:
             messages.success(request, "Something went wrong")
-            return redirect('/create-account')
+            return redirect('/create-management-account')
         
     else:
         messages.success(request, "Something went wrong")
-        return redirect('/create-account')
+        return redirect('/create-management-account')
     
 @transaction.atomic
 def createStudentAccountAuth(request):
@@ -57,7 +57,7 @@ def createStudentAccountAuth(request):
     
     if User.objects.filter(email = email).exists():
         messages.success(request, "User already exist.")
-        return redirect('/create-account')
+        return redirect('/create-student-account')
     
     if not User.objects.filter(email = email).exists():
         newUserInstance = User.objects.create_user(username = username, password = password, email = email, first_name = firstname, last_name = lastname, is_student = is_student)
@@ -66,15 +66,15 @@ def createStudentAccountAuth(request):
             newManagementInstance = Student(user = newUserInstance)
             newManagementInstance.save()
             messages.success(request, "Account created successfully")
-            return redirect('/create-account')
+            return redirect('/create-student-account')
         
         else:
             messages.success(request, "Something went wrong")
-            return redirect('/create-account')
+            return redirect('/create-student-account')
         
     else:
         messages.success(request, "Something went wrong")
-        return redirect('/create-account')
+        return redirect('/create-student-account')
         
 
 def userLogin(request):
