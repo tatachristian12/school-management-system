@@ -11,40 +11,36 @@
               <tbody>
                 <tr class="py-5">
                   <td class="fs-5">Username: </td>
-                  <td class="fs-5">random</td>
+                  <td class="fs-5">{{request.user.username}}</td>
                 
                 </tr>
                 <tr>
                   <td class="fs-5">First Name: </td>
-                  <td class="fs-5">placeholder</td>
+                  <td class="fs-5">{{request.user.first_name}}</td>
                 </tr>
                 <tr>
                   <td class="fs-5">Last Name: </td>
-                  <td class="fs-5">data</td>
+                  <td class="fs-5">{{request.user.last_name}}</td>
                 </tr>
                 <tr>
                   <td class="fs-5">Email Address: </td>
-                  <td class="fs-5">information</td>
+                  <td class="fs-5">{{request.user.email}}</td>
                 </tr>
+                
+                {% if all_registrations %}
+                {% for registration in all_registrations %}
                 <tr>
-                  <td class="fs-5">Employee Number: </td>
-                  <td class="fs-5">text</td>
+                <td class="fs-5">Parent of: </td>
+                <td class="fs-5">
+                    {{ registration.parent_of.user.first_name }} {{ registration.parent_of.user.last_name }} 
+                    
+                </td>
                 </tr>
+                {% endfor %}
+                {% endif %}
                 <tr>
                   <td class="fs-5">House Address: </td>
-                  <td class="fs-5">dashboard</td>
-                </tr>
-                <tr>
-                  <td class="fs-5">D.O.B: </td>
-                  <td class="fs-5">dashboard</td>
-                </tr>
-                <tr>
-                  <td class="fs-5">1,007</td>
-                  <td class="fs-5">placeholder</td>
-                </tr>
-                <tr>
-                  <td class="fs-5">1,008</td>
-                  <td class="fs-5">random</td>
+                  <td class="fs-5">{{parent_instance.address}}</td>
                 </tr>
                
               </tbody>
