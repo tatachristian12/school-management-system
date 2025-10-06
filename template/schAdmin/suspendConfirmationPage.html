@@ -1,0 +1,17 @@
+{% extends "schAdmin/base.html" %}
+{% load static %}
+
+{% block title %} delete user {% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <br>
+<div>
+    <p>Are you sure you want to suspend this user: {{fetchedUser.first_name}} {{fetchedUser.last_name}}? </p>
+    <div>
+        <a href="/admin-user-management" class="btn btn-primary">No</a>
+        <a href="/admin-suspend-users/{{fetchedUser.id}}" class="btn btn-danger">Yes</a>
+    </div>
+</div>
+</main>
+{% endblock %}
