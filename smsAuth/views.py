@@ -63,8 +63,9 @@ def createStudentAccountAuth(request):
         newUserInstance = User.objects.create_user(username = username, password = password, email = email, first_name = firstname, last_name = lastname, is_student = is_student)
         if newUserInstance:
             newUserInstance.save()
-            newManagementInstance = Student(user = newUserInstance)
-            newManagementInstance.save()
+            newStudentInstance = Student(user = newUserInstance)
+            newStudentInstance.student_number = username
+            newStudentInstance.save()
             messages.success(request, "Account created successfully")
             return redirect('/create-student-account')
         
@@ -77,8 +78,11 @@ def createStudentAccountAuth(request):
         return redirect('/create-student-account')
         
 
-def userLogin(request):
-    return render(request, 'auth/login.html')
+def studentUserLogin(request):
+    return render(request, 'auth/studentLogin.html')
+
+def managementUserLogin(request):
+    return render(request, 'auth/managementLogin.html')
 
 @transaction.atomic
 def userAuthentication(request):
