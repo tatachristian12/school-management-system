@@ -1,0 +1,80 @@
+{% extends "student/base.html" %} 
+{% load static %} 
+
+{% block title %} Edit Profile {% endblock %} 
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<div class="container mt-1">
+  <div class="card shadow-lg rounded-3">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Edit Profile</h2>
+
+      <form method="post" action="/update-student-profile/{{student_id}}">
+         {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" value="{{request.user.first_name}}"
+                        placeholder="Enter first name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" value="{{request.user.last_name}}" placeholder="Enter last name"
+                        class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" name="email" value="{{request.user.email}}" placeholder="Enter last name"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" value="{{request.user.username}}" placeholder="Enter username"
+                        class="form-control" required>
+                </div>
+                 <div class="mb-3">
+                    <label class="form-label">Student Number</label>
+                    <input type="text" name="student_number" value="{{student_instance.student_number}}" placeholder="Enter Address"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+                    <input type="text" name="department" value="{{student_instance.department.name}}" placeholder="Enter Department"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" value="{{student_instance.address}}" placeholder="Enter Address"
+                        class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="text" name="DOB" value="{{student_instance.DOB}}" placeholder="Enter DOB"
+                        class="form-control" required>
+                </div>
+
+                {% if messages %}
+                <div class="alert alert-primary" role="alert">
+                    {% for eachMessage in messages %}
+                    {{eachMessage}}
+                    {% endfor %}
+                </div>
+                {% else %}
+
+                {% endif %}
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between">
+          <a href="/student-profile" class="btn btn-secondary"
+            >Cancel</a
+          >
+          <button type="submit" class="btn btn-success px-4">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
+{% endblock %}
