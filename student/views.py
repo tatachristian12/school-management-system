@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import Student
+from .models import Student, Courses, SchoolDepartment
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -13,9 +13,23 @@ def studentProfile(request):
     }
     return render(request, 'student/profile.html', context=data) 
 
-
 def studentCourse(request):
-    return render(request, 'student/courses.html')
+    student = Student.objects.filter(user=request.user).first()
+    student_instance = Student.objects.get(user=User.objects.get(email=request.user.email))
+    
+    if not student:
+        return render(request, 'student/courses.html', {
+            "error": "No student record found"
+        })
+
+    
+    courses = Courses.objects.filter(department=student.department)
+
+    return render(request, 'student/courses.html', {
+        "student": student,
+        "courses": courses,
+        "student_instance": student_instance
+    })
 
 def studentAttendance(request):
     return render(request, 'student/attendance.html')
