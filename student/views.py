@@ -9,12 +9,13 @@ User = get_user_model()
 def studentProfile(request):
     student_instance = Student.objects.get(user=User.objects.get(email=request.user.email))
     data = {
-        "student_instance": student_instance,
+        "student_instance": student_instance
     }
     return render(request, 'student/profile.html', context=data) 
 
 def studentCourse(request):
     student = Student.objects.filter(user=request.user).first()
+    student_instance = Student.objects.get(user=User.objects.get(email=request.user.email))
     
     if not student:
         return render(request, 'student/courses.html', {
@@ -27,8 +28,8 @@ def studentCourse(request):
     return render(request, 'student/courses.html', {
         "student": student,
         "courses": courses,
+        "student_instance": student_instance
     })
-
 
 def studentAttendance(request):
     return render(request, 'student/attendance.html')

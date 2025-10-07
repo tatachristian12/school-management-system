@@ -1,13 +1,12 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import Management
-from .models import Courses, SchoolDepartment, Student
+from .models import Management, Courses, SchoolDepartment, Student
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # Create your views here.
 def teacherProfile(request):
-    user_instance = User.objects.get(email=request.user.email)   # now using custom user
+    user_instance = User.objects.get(email=request.user.email)  # now using custom user
     teacher_instance = Management.objects.get(user=user_instance)
 
     data = {
@@ -19,6 +18,7 @@ def teacherProfile(request):
 def teacherCourse(request):
      department_id = request.GET.get('department')
      courses = Courses.objects.filter(teacher = request.user)
+     teacher_instance = Management.objects.get(user=User.objects.get(email=request.user.email))
      if department_id:
          courses = courses.filter(department_id=department_id)
 
@@ -27,13 +27,16 @@ def teacherCourse(request):
      return render(request, 'teacher/courses.html', {
          "courses": courses,
          "departments": departments,
-         "selectedDepartment": department_id
+         "selectedDepartment": department_id,
+         "teacher_instance": teacher_instance
          })
 
 def adminCourse(request):
     courses = Courses.objects.all()
+    admin_instance = Management.objects.get(user=User.objects.get(email=request.user.email))
     return render(request, 'schAdmin/courses.html', {
-        "courses": courses
+        "courses": courses,
+        "admin_instance": admin_instance
     })
 
 
@@ -79,7 +82,6 @@ def teacherUpdateProfile(request,teacher_id):
         messages.success(request, "Fail to Update")
         return redirect(f'/edit-teacher-profile/{teacher_id}')  
     
-
 def adminAddCourse(request):
     if request.method == "POST":
         name = request.POST['name']
@@ -106,10 +108,8 @@ def adminAddCourse(request):
     else:
         departments = SchoolDepartment.objects.all()
         teachers = User.objects.filter(is_teacher = True)
-        return render(request, "schAdmin/addCourse.html", {"departments": departments, "teachers": teachers})
-      
-
-
+        return render(request, "schAdmin/addCourse.html", {"departments": departments, "teachers": teachers})    
+    
 def adminEditCourse(request, courseId):
         admin_instance = Management.objects.get(user=request.user)
         course = Courses.objects.get(id=courseId, teacher = request.user)
@@ -122,8 +122,7 @@ def adminEditCourse(request, courseId):
             "course": course,
             'departments': departments,
         }
-        return render(request, "schAdmin/editCourse.html", context=data)
-
+        return render(request, "schAdmin/editCourse.html", context=data)    
 
 def adminUpdateCourse(request, courseId):
     if request.method == "POST":
@@ -145,7 +144,8 @@ def adminUpdateCourse(request, courseId):
     
 def adminDeleteCourse(request, courseId):
     Courses.objects.filter(id=courseId).delete()
-    return redirect('/admin-courses')    
+    return redirect('/admin-courses')        
+
 
 def updateAttendanceRecord(request):
     pass
@@ -159,11 +159,104 @@ def adminProfile(request):
     }
     return render(request, 'schAdmin/profile.html', context=data)
 
-def adminManageStudentAccount(request):
-    return render(request, 'schAdmin/manageStudentAccount.html')
+def adminUserManagement(request):
+    if request.user.is_authenticated:
+        user_instance = User.objects.get(email=request.user.email)  # now using custom user
+        admin_instance = Management.objects.get(user=user_instance)
+        current_user = request.user
+        all_users = User.objects.filter(status = True).exclude(pk = current_user.pk)
+        active_users = True
+        data = {
+            "all_users": all_users,
+            "active_users": active_users,
+            "admin_instance": admin_instance
+        }
+        return render(request, 'schAdmin/userManagement.html', context=data)
+    
+def adminDeleteConfirmationPage(request, delete_id):
+    fetchedUser = User.objects.get(id = delete_id)
+    if fetchedUser:
+        data = {
+            "fetchedUser": fetchedUser,
+        }
+        return render(request, 'schAdmin/deleteConfirmationPage.html', context=data)
+    else:
+        messages.success(request, "No user Found")
+        return redirect('/admin-user-management')
 
-def adminStaffAccounts(request):
-    return render(request, 'schAdmin/staffAccounts.html')
+def adminSuspendConfirmationPage(request, suspend_id):
+    fetchedUser = User.objects.get(id = suspend_id)
+    if fetchedUser:
+        data = {
+            "fetchedUser": fetchedUser,
+        }
+        return render(request, 'schAdmin/suspendConfirmationPage.html', context=data)
+    else:
+        messages.success(request, "No user Found")
+        return redirect('/admin-user-management')
+    
+def adminActivateConfirmationPage(request, activate_id):
+    fetchedUser = User.objects.get(id = activate_id)
+    if fetchedUser:
+        data = {
+            "fetchedUser": fetchedUser,
+        }
+        return render(request, 'schAdmin/activateConfirmationPage.html', context=data)
+    else:
+        messages.success(request, "No user Found")
+        return redirect('/admin-user-management')
+    
+def adminDeleteUser(request, delete_id):
+    if request.method == "GET":
+        deleteUser = User.objects.filter(id = delete_id).update(status = False)
+        if deleteUser:
+            messages.success(request, "User deleted successfully.")
+            return redirect('/admin-user-management')
+        else:
+            messages.success(request, "Unable to delete user.")
+            return redirect('/admin-user-management')
+    
+def adminDeletedUsers(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        all_users = User.objects.filter(status = False).exclude(pk = current_user.pk)
+        all_deleted_users = True
+        data = {
+            "all_users": all_users,
+            "all_deleted_users": all_deleted_users
+        }
+        return render(request, 'schAdmin/userManagement.html', context=data)
+    
+def adminActivateUsers(request, activate_id):
+      if request.method == "GET":
+        deleteUser = User.objects.filter(id = activate_id).update(status = True)
+        if deleteUser:
+                messages.success(request, "User Activated successfully.")
+                return redirect('/admin-user-management')
+        else:
+            messages.success(request, "Unable to activate user.")
+            return redirect('/admin-user-management')
+        
+def adminSuspendUsers(request, suspend_id):
+    if request.method == "GET":
+        deleteUser = User.objects.filter(id = suspend_id).update(status = "suspend")
+        if deleteUser:
+            messages.success(request, "User suspended successfully.")
+            return redirect('/admin-user-management')
+        else:
+            messages.success(request, "Unable to delete user.")
+            return redirect('/admin-user-management')
+        
+def adminSuspendedUsers(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        all_users = User.objects.filter(status = "suspend").exclude(pk = current_user.pk)
+        all_suspended_users = True
+        data = {
+            "all_users": all_users,
+            "all_suspended_users": all_suspended_users
+        }
+        return render(request, 'schAdmin/userManagement.html', context=data)
 
 def adminEditProfile(request,admin_id):
     user_instance = User.objects.get(email=request.user.email)  # now using custom user

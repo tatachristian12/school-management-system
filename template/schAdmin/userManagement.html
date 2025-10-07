@@ -1,0 +1,106 @@
+{% extends "schAdmin/base.html" %} 
+
+{% load static %} 
+
+{% block title %} user management {% endblock %} 
+
+{% block content %} 
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <h1>User Management</h1>
+     <div class="dropdown d-flex justify-content-end">
+  <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Create account
+  </button>
+  <ul class="dropdown-menu ">
+    <li><a class="dropdown-item" href="/create-management-account">Create management account</a></li>
+    <li><a class="dropdown-item" href="/create-student-account">create student account</a></li>
+
+  </ul>
+</div>
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    select an option
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/admin-user-management">Active users</a></li>
+    <li><a class="dropdown-item" href="/admin-suspended-users">Suspended users</a></li>
+    <li><a class="dropdown-item" href="/admin-deleted-users">Deleted users</a></li>
+  </ul>
+</div>
+<br>
+  {% if active_users %}
+  <h3>Active users</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">User ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+
+  {% if all_users %}
+  {% for users in all_users %}
+  <tbody>
+    <tr>
+      <th scope="row">{{users.id}}</th>
+      <td>{{users.first_name}} {{users.last_name}}</td>
+      <td>{{users.email}}</td>
+      <td><a href="/admin-delete-confirmation-page/{{users.id}}" class="btn btn-danger">Delete user</a><a href="/admin-suspend-confirmation-page/{{users.id}}" class="btn btn-success ms-2">Suspend user</a> 
+      </td>
+    </tr>
+      </tbody>
+      {% endfor %} {% endif %} 
+</table>
+{% endif %}
+{% if all_deleted_users %}
+<h3>Deleted users</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">User ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  {% if all_users %}
+  {% for users in all_users %}
+  <tbody>
+    <tr>
+      <th scope="row">{{users.id}}</th>
+      <td>{{users.first_name}} {{users.last_name}}</td>
+      <td>{{users.email}}</td>
+      <td><a href="/admin-activate-confirmation-page/{{users.id}}" class="btn btn-primary">Activate user</a></td>
+    </tr>
+      </tbody>
+      {% endfor %} {% endif %} 
+</table>
+{% endif %}
+{% if all_suspended_users %}
+<h3>Suspended Users</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">User ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  {% if all_users %}
+  {% for users in all_users %}
+  <tbody>
+    <tr>
+      <th scope="row">{{users.id}}</th>
+      <td>{{users.first_name}} {{users.last_name}}</td>
+      <td>{{users.email}}</td>
+      <td><a href="/admin-activate-confirmation-page/{{users.id}}" class="btn btn-primary">Activate user</a></td>
+    </tr>
+      </tbody>
+      {% endfor %} {% endif %} 
+</table>
+{% endif %}
+</main>
+{% endblock %}

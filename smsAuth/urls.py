@@ -8,9 +8,10 @@ urlpatterns = [
     path('create-student-account-auth', views.createStudentAccountAuth),
     path('create-management-account-auth', views.createManagementAccountAuth),
     path('user-auth', views.userAuthentication),
-    path('', views.userLogin),
+    path('', views.studentUserLogin),
+    path('management-login', views.managementUserLogin),
     path('logout', views.userLogout),
     path('reset-password', views.resetPassword),
-
+    path('reset-password-auth', views.resetPasswordAuth),
 
 ]
