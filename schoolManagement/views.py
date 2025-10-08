@@ -40,6 +40,13 @@ def adminCourse(request):
         "admin_instance": admin_instance
     })
 
+def adminDepartments(request):
+    departments = SchoolDepartment.objects.all()
+    admin_instance = Management.objects.get(user=User.objects.get(email=request.user.email))
+    return render(request, 'schAdmin/departments.html', {
+        "departments": departments,
+        "admin_instance": admin_instance
+    })
 
 def teacherAttendance(request):
     return render(request, 'teacher/attendance.html')
@@ -214,6 +221,35 @@ def adminDeleteCourse(request, courseId):
     Courses.objects.filter(id=courseId).delete()
     return redirect('/admin-courses')        
 
+def adminAddDepartments(request):
+    admin_instance = Management.objects.get(user=User.objects.get(email=request.user.email))
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            SchoolDepartment.objects.create(name=name)
+            return redirect('/admin-departments')
+    return render(request, 'schAdmin/addDepartment.html', {
+        "admin_instance": admin_instance
+    })
+
+def adminEditDepartments(request, id):
+    admin_instance = Management.objects.get(user=User.objects.get(email=request.user.email))
+    department = SchoolDepartment.objects.get(id=id)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            department.name = name
+            department.save()
+            return redirect('/admin-departments')
+    return render(request, 'schAdmin/editDepartment.html', {
+        "admin_instance": admin_instance,
+        "department": department
+    })    
+        
+def adminDeleteDepartments(request, id):
+    department = SchoolDepartment.objects.get(id=id)
+    department.delete()
+    return redirect('/admin-departments')
 
 def updateAttendanceRecord(request):
     pass
