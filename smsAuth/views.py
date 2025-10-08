@@ -24,9 +24,9 @@ def createManagementAccountAuth(request):
         username = request.POST['username']
         password = request.POST['password']
     
-    if User.objects.filter(email = email).exists():
+    if User.objects.filter(email = email, status = True).exists():
         messages.success(request, "User already exist.")
-        return redirect('/create-account')
+        return redirect('/create-management-account')
     
     if not User.objects.filter(email = email).exists():
         newUserInstance = User.objects.create_user(username = username, password = password, email = email, first_name = firstname, last_name = lastname)
@@ -63,8 +63,9 @@ def createStudentAccountAuth(request):
         newUserInstance = User.objects.create_user(username = username, password = password, email = email, first_name = firstname, last_name = lastname, is_student = is_student)
         if newUserInstance:
             newUserInstance.save()
-            newManagementInstance = Student(user = newUserInstance)
-            newManagementInstance.save()
+            newStudentInstance = Student(user = newUserInstance)
+            newStudentInstance.student_number = username
+            newStudentInstance.save()
             messages.success(request, "Account created successfully")
             return redirect('/create-student-account')
         
@@ -77,8 +78,11 @@ def createStudentAccountAuth(request):
         return redirect('/create-student-account')
         
 
-def userLogin(request):
-    return render(request, 'auth/login.html')
+def studentUserLogin(request):
+    return render(request, 'auth/studentLogin.html')
+
+def managementUserLogin(request):
+    return render(request, 'auth/managementLogin.html')
 
 @transaction.atomic
 def userAuthentication(request):
@@ -93,18 +97,24 @@ def userAuthentication(request):
     if User.objects.filter(username=username).exists():
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            if user.is_active and user.is_student:
+            if user.is_active and user.is_student and user.status == "True":
                 login(request, user)
                 return redirect('/student-profile')
-            if user.is_active and user.is_teacher:
+            if user.is_active and user.is_teacher and user.status == "True":
                 login(request, user)
                 return redirect('/teacher-profile')
-            if user.is_active and user.is_parent:
+            if user.is_active and user.is_parent and user.status == "True":
                 login(request, user)
                 return redirect('/parent-profile')
-            if user.is_active and user.is_admin:
+            if user.is_active and user.is_admin and user.status == "True":
                 login(request, user)
                 return redirect('/admin-profile')
+            if user.status == "suspend":
+                messages.success(request, "Account Suspended.")
+                return redirect('/')
+            if user.status == "False":
+                messages.success(request, "User not found.")
+                return redirect('/')
             else:
                 messages.success(request, "Incorrect username or password.")
             return redirect('/')
@@ -119,3 +129,22 @@ def userLogout(request):
 
 def resetPassword(request):
     return render(request, 'auth/resetPassword.html')
+
+@transaction.atomic
+def resetPasswordAuth(request):
+    if request.method == "POST":
+        email = request.POST['email']
+        password = request.POST['password']
+        user_instance = User.objects.get(email = email)
+
+        if email == user_instance.email and password == user_instance.password:
+            messages.success(request, "The password you entered is the old password")
+            return redirect('/reset-password')
+        elif email == user_instance.email and password != user_instance.password:
+            user_instance.set_password(password)
+            user_instance.save()
+            messages.success(request, "Password reset successfully")
+            return redirect('/reset-password')
+        else: 
+            messages.success(request, "Something went wrong")
+            return redirect('/reset-password')

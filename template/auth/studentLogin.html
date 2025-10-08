@@ -12,19 +12,20 @@
   <div class="card shadow-lg rounded-3 w-50 d-flex align-items-center pb-5">
   <br>
   <h1 class="text-center text-primary">Welcome to SMS</h1>
-  <h2 class="text-center text-primary">Reset Password</h2>
-<form method="POST" action="/reset-password-auth" autocomplete="off">
+  <br>
+<h2 class="text-primary">Login Now</h2>
+<form method="POST" action="/user-auth" autocomplete="off">
   {% csrf_token %}
   <div class="mb-3">
-    <label class="form-label">Email address</label>
-    <input type="text" name="email" placeholder="Enter email address" class="form-control" required>
+    <label class="form-label">Student Number</label>
+    <input type="text" name="username" placeholder="Enter student number" class="form-control" required>
   </div>
   <div class="mb-3">
     <label class="form-label">password</label>
     <input type="password" name="password" placeholder="Enter password" class="form-control" required>
   </div>
   <div>
-    <p>Go back to Login <a href="/">Login</a></p>
+    <p>Forgotten password? <a href="/reset-password">Reset password</a></p>
   </div>
   {% if messages %}
   <div class="alert alert-primary" role="alert">
@@ -36,7 +37,7 @@
 
   {% endif%}
   <div class="text-center">
-  <button type="submit" class="btn btn-primary">Reset Password</button>
+  <button type="submit" class="btn btn-primary">Login</button>
   </div>
 </form>
     </div>

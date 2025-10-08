@@ -30,7 +30,7 @@
     <input type="email" name="email" placeholder="Enter last name" class="form-control" required>
   </div>
   <div class="mb-3">
-    <label class="form-label">Username</label>
+    <label class="form-label">Employee Number/Username</label>
     <input type="text" name="username" placeholder="Enter username" class="form-control" required>
   </div>
   <div class="mb-3">
@@ -50,6 +50,11 @@
 
   {% endif%}
   <div class="text-center">
+    {% if user.is_authenticated %}
+    <a href="/admin-user-management" class="btn btn-secondary">Back</a>
+    {% else %}
+
+    {% endif%}
   <button type="submit" class="btn btn-primary">Create account </button>
   </div>
 </form>
