@@ -1,0 +1,32 @@
+{% extends "teacher/base.html" %}
+{% load static %}
+
+{% block title %} Delete Announcement {% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	<div class="container mt-4">
+		<div class="card shadow-lg rounded-3">
+			<div class="card-body">
+				<h2 class="card-title text-center mb-4">Delete Announcement</h2>
+
+				<div class="mb-3">
+					<p>Are you sure you want to delete the following announcement?</p>
+					<h5 class="fw-bold">{{ announcement.title }}</h5>
+					<p class="text-muted small">{{ announcement.created_at|date:"M d, Y H:i" }}</p>
+					<div class="p-3 mb-3 border rounded bg-light">{{ announcement.announcement }}</div>
+				</div>
+
+				<form method="post" action="/teacher-announcement/delete/{{ announcement.id }}/">
+					{% csrf_token %}
+					<div class="d-flex justify-content-between">
+						<a href="/teacher-announcement" class="btn btn-secondary">Cancel</a>
+						<button type="submit" class="btn btn-danger">Delete Announcement</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

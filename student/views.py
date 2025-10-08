@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import Student
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from schoolManagement.models import Announcement
+from student.models import Student
 User = get_user_model()
 
 
@@ -21,7 +23,23 @@ def studentAttendance(request):
     return render(request, 'student/attendance.html')
 
 def studentAnnouncement(request):
-    return render(request, 'student/announcement.html')
+    user_instance = User.objects.get(email=request.user.email)
+    student_instance = Student.objects.get(user=user_instance)
+    announcements = Announcement.objects.filter(status=True).order_by('-created_at')
+    data={
+        "student_instance": student_instance,
+        "announcements": announcements}
+    return render(request, 'student/announcement.html', context=data)
+
+def studentAnnouncementDetail(request, ann_id):
+    user_instance = User.objects.get(email=request.user.email)
+    student_instance = Student.objects.get(user=user_instance)
+    announcement = get_object_or_404(Announcement, id=ann_id, status=True)
+    data={
+        "student_instance": student_instance,
+        "announcement": announcement
+    }
+    return render(request, "student/announcementBody.html", context=data)
 
 def studentFeeManagement(request):
     return render(request, 'student/feesManagement.html')
