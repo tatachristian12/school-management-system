@@ -1,0 +1,28 @@
+{% extends "schAdmin/base.html" %}
+{% load static %}
+
+{% block title %} Edit Department {% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<div>
+  <div style="width: 250px;"></div>
+  <div style="flex: 1; padding-left: 20px; margin-top: 0;">
+    <h2>Edit Department</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Department Name</label>
+        <input type="text" name="name" class="form-control" value="{{ department.name }}" required>
+      </div>
+
+      <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <button type="submit" class="btn btn-success">Update Department</button>
+        <a href="/admin-departments" class="btn btn-secondary">Back</a>
+      </div>
+    </form>
+  </div>
+</div>
+</main>
+{% endblock %}
