@@ -1,0 +1,41 @@
+{% extends "teacher/base.html" %}
+{% load static %}
+
+{% block title %} Edit Announcement {% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="container mt-4">
+        <div class="card shadow-lg rounded-3">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Edit Announcement</h2>
+
+                <form method="post" action="/teacher-announcement/edit/{{ announcement.id }}/" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Announcement Title</label>
+                        <input type="text" name="title" value="{{ announcement.title }}" class="form-control" maxlength="200" placeholder="Short summary or title..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Announcement</label>
+                        <textarea name="announcement" class="form-control" rows="6" placeholder="Write your full announcement here..." required>{{ announcement.announcement }}</textarea>
+                    </div>
+
+                    {% if messages %}
+                    <div class="alert alert-primary" role="alert">
+                        {% for msg in messages %}{{ msg }}{% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/teacher-announcement/{{ announcement.id }}/" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Announcement</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

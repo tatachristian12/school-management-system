@@ -1,8 +1,9 @@
-from django.shortcuts import render, HttpResponse, redirect
-from .models import Management, Courses, SchoolDepartment, Student
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from .models import Management, Courses, SchoolDepartment, Student, Announcement
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
 
 # Create your views here.
 def teacherProfile(request):
@@ -51,10 +52,77 @@ def teacherAttendance(request):
     return render(request, 'teacher/attendance.html')
 
 def teacherAnnouncement(request):
-    return render(request, 'teacher/announcement.html')
+    user_instance = User.objects.get(email=request.user.email)
+    teacher_instance = Management.objects.get(user=user_instance)
+    if request.method == "POST":
+        title = request.POST.get("title")
+        text = request.POST.get("announcement")
+        if title and text:
+            Announcement.objects.create(user=teacher_instance, title=title, announcement=text)
+            messages.success(request, "Announcement created successfully!")
+        else:
+            messages.error(request, "Both title and announcement cannot be empty.")
+        return redirect('/teacher-announcement')
 
+    announcements = Announcement.objects.filter(user=teacher_instance, status=True).order_by('-created_at')
+    data = {
+        "teacher_instance": teacher_instance,
+        "announcements": announcements
+    }
+    return render(request, "teacher/announcement.html", context=data)
+
+def teacherAnnouncementDetail(request, ann_id):
+    user_instance = User.objects.get(email=request.user.email)
+    teacher_instance = Management.objects.get(user=user_instance)
+    announcement = get_object_or_404(Announcement, id=ann_id,user=teacher_instance, status=True)
+    data={
+        "teacher_instance": teacher_instance,
+        "announcement": announcement
+    }
+    return render(request, "teacher/announcementBody.html", context=data)
+def editTeacherAnnouncement(request, ann_id):
+    user_instance = User.objects.get(email=request.user.email)
+    teacher_instance = Management.objects.get(user=user_instance)
+    announcement = get_object_or_404(Announcement, id=ann_id, user=teacher_instance, status=True)
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        text = request.POST.get("announcement")
+        if title and text:
+            announcement.title = title
+            announcement.announcement = text
+            announcement.save()
+            messages.success(request, "Announcement updated successfully!")
+            return redirect(f'/teacher-announcement/{ann_id}/')
+        else:
+            messages.error(request, "Both title and announcement cannot be empty.")
+            return redirect(f'/teacher-announcement/edit/{ann_id}/')
+
+    data = {
+        "teacher_instance": teacher_instance,
+        "announcement": announcement
+    }
+    return render(request, "teacher/editAnnouncement.html", context=data)
+
+def deleteTeacherAnnouncement(request, ann_id):
+    user_instance = User.objects.get(email=request.user.email)
+    teacher_instance = Management.objects.get(user=user_instance)
+    announcement = get_object_or_404(Announcement, id=ann_id, user=teacher_instance)
+    if request.method == "POST":
+        announcement.status = False
+        announcement.save()
+        messages.success(request, "Announcement deleted successfully!")
+        return redirect('/teacher-announcement')
+
+    data = {
+        "teacher_instance": teacher_instance,
+        "announcement": announcement
+    }
+    return render(request, 'teacher/deleteAnnouncement.html', context=data)
+
+    
 def teacherEditProfile(request,teacher_id):
-    user_instance = User.objects.get(email=request.user.email)  # now using custom user
+    user_instance = User.objects.get(email=request.user.email)  
     teacher_instance = Management.objects.get(user=user_instance)
 
     data = {

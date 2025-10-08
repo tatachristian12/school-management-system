@@ -20,7 +20,8 @@ class Attendance(models.Model):
 
 class Announcement(models.Model):
     user = models.ForeignKey(Management, on_delete=models.CASCADE, related_name="user_announcement")
-    announcement = models.CharField(max_length=500,null=False,blank=True)
+    title = models.CharField(max_length=200, null=False, blank=True)
+    announcement = models.CharField(max_length=500, null=False, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    status = models.BooleanField(default=True)

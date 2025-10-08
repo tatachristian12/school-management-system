@@ -1,6 +1,6 @@
 {% extends "teacher/base.html" %} 
 {% load static %} 
-{% block title %} Student profile {% endblock %} 
+{% block title %} Teacher profile {% endblock %} 
 
 {% block content %}
     
@@ -11,7 +11,7 @@
               <tbody>
               <tr>
                   <td class="fs-5">Employee Number: </td>
-                  <td class="fs-5"> {{ teacher_instance.employee_number }}</td>
+                  <td class="fs-5"> {{ request.user.username }}</td>
                 </tr>
                 <tr>
                   <td class="fs-5">First Name: </td>
