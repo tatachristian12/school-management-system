@@ -9,17 +9,20 @@
     <div class="card shadow-lg  rounded-3">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Edit Profile</h2>
+            <div class="alert alert-danger" role="alert">
+            You can only edit your email address and home address. Contact the admin to edit other information.
+            </div>
             <form method="POST" action="/update-teacher-profile/{{teacher_id}}" autocomplete="off">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label">First Name</label>
                     <input type="text" name="first_name" value="{{request.user.first_name}}"
-                        placeholder="Enter first name" class="form-control" required>
+                        placeholder="Enter first name" class="form-control" required readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Last Name</label>
                     <input type="text" name="last_name" value="{{request.user.last_name}}" placeholder="Enter last name"
-                        class="form-control" required>
+                        class="form-control" required readonly>
                 </div>
 
                 <div class="mb-3">
@@ -28,24 +31,24 @@
                         class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Username</label>
+                    <label class="form-label">Employee Number/Username</label>
                     <input type="text" name="username" value="{{request.user.username}}" placeholder="Enter username"
-                        class="form-control" required>
+                        class="form-control" required readonly>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Address</label>
+                    <label class="form-label">Home Address</label>
                     <input type="text" name="address" value="{{teacher_instance.address}}" placeholder="Enter Address"
                         class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Marital Status</label>
                     <input type="text" name="marital_status" value="{{teacher_instance.marital_status}}"
-                        placeholder="Enter Marital status" class="form-control" required>
+                        placeholder="Enter Marital status" class="form-control" required readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Date of Birth</label>
                     <input type="text" name="DOB" value="{{teacher_instance.DOB}}" placeholder="Enter DOB"
-                        class="form-control" required>
+                        class="form-control" required readonly>
                 </div>
 
                 {% if messages %}

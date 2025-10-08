@@ -14,11 +14,11 @@
   <h1 class="text-center text-primary">Welcome to SMS</h1>
   <br>
 <h2 class="text-primary">Login Now</h2>
-<form method="POST" action="/user-auth" autocomplete="off">
+<form method="POST" action="/management-user-auth" autocomplete="off">
   {% csrf_token %}
   <div class="mb-3">
     <label class="form-label">Employee Number/ username</label>
-    <input type="text" name="username" placeholder="Enter student number" class="form-control" required>
+    <input type="text" name="username" placeholder="Employee number/ username" class="form-control" required>
   </div>
   <div class="mb-3">
     <label class="form-label">password</label>

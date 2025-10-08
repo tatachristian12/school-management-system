@@ -12,7 +12,11 @@ def createManageAccount(request):
     return render(request, 'auth/createManagementAccount.html')
 
 def createStudentAccount(request):
-    return render(request, 'auth/createStudentAccount.html')
+    department_instance = SchoolDepartment.objects.all()
+    data = {
+        "department_instance":department_instance
+    }
+    return render(request, 'auth/createStudentAccount.html', context=data)
 
     
 @transaction.atomic
@@ -23,6 +27,9 @@ def createManagementAccountAuth(request):
         email = request.POST['email']
         username = request.POST['username']
         password = request.POST['password']
+        dob = request.POST['dob']
+        marital_status = request.POST['marital_status']
+        address = request.POST['address']
     
     if User.objects.filter(email = email, status = True).exists():
         messages.success(request, "User already exist.")
@@ -33,6 +40,10 @@ def createManagementAccountAuth(request):
         if newUserInstance:
             newUserInstance.save()
             newManagementInstance = Management(user = newUserInstance)
+            newManagementInstance.DOB = dob
+            newManagementInstance.employee_number = username
+            newManagementInstance.marital_status = marital_status
+            newManagementInstance.address = address
             newManagementInstance.save()
             messages.success(request, "Account created successfully")
             return redirect('/create-management-account')
@@ -54,6 +65,9 @@ def createStudentAccountAuth(request):
         username = request.POST['username']
         password = request.POST['password']
         is_student = True
+        dob = request.POST['dob']
+        address = request.POST['address']
+        department_id = request.POST['department']
     
     if User.objects.filter(email = email).exists():
         messages.success(request, "User already exist.")
@@ -61,10 +75,14 @@ def createStudentAccountAuth(request):
     
     if not User.objects.filter(email = email).exists():
         newUserInstance = User.objects.create_user(username = username, password = password, email = email, first_name = firstname, last_name = lastname, is_student = is_student)
+        department = SchoolDepartment.objects.get(id=department_id)
         if newUserInstance:
             newUserInstance.save()
             newStudentInstance = Student(user = newUserInstance)
             newStudentInstance.student_number = username
+            newStudentInstance.DOB = dob
+            newStudentInstance.address = address
+            newStudentInstance.department = department
             newStudentInstance.save()
             messages.success(request, "Account created successfully")
             return redirect('/create-student-account')
@@ -85,7 +103,7 @@ def managementUserLogin(request):
     return render(request, 'auth/managementLogin.html')
 
 @transaction.atomic
-def userAuthentication(request):
+def schoolUserAuthentication(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -100,6 +118,31 @@ def userAuthentication(request):
             if user.is_active and user.is_student and user.status == "True":
                 login(request, user)
                 return redirect('/student-profile')
+            if user.status == "suspend":
+                messages.success(request, "Account Suspended.")
+                return redirect('/')
+            if user.status == "False":
+                messages.success(request, "User not found.")
+                return redirect('/')
+            else:
+                messages.success(request, "Incorrect username or password.")
+            return redirect('/')
+        else:
+            messages.success(request, "Incorrect username or password.")
+            return redirect('/')
+        
+def managementUserAuthentication(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+    
+    if not User.objects.filter(username=username).exists():
+        messages.success(request, "User does not exist.")
+        return redirect('/')
+    
+    if User.objects.filter(username=username).exists():
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
             if user.is_active and user.is_teacher and user.status == "True":
                 login(request, user)
                 return redirect('/teacher-profile')

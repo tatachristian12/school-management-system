@@ -34,6 +34,23 @@
     <input type="text" name="username" placeholder="Enter student number" class="form-control" required>
   </div>
   <div class="mb-3">
+        <label class="form-label">Department</label>
+        <select name="department" class="form-select" required>
+          <option value="" disabled selected>-- Select Department --</option>
+          {% for department in department_instance %}
+          <option value="{{ department.id }}">{{ department.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+  <div class="mb-3">
+    <label class="form-label">DOB</label>
+    <input type="text" name="dob" placeholder="DD-MM-YYYY" class="form-control" required>
+  </div>
+    <div class="mb-3">
+    <label class="form-label">Home Address</label>
+    <input type="text" name="address" placeholder="Enter home address" class="form-control" required>
+  </div>
+  <div class="mb-3">
     <label class="form-label">password</label>
     <input type="password" name="password" placeholder="Enter password" class="form-control" required>
   </div>
